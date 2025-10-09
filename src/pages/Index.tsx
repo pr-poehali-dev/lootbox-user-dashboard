@@ -1,11 +1,242 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import Icon from "@/components/ui/icon";
+import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+
+const revenueData = [
+  { date: "05.10", amount: 45200 },
+  { date: "06.10", amount: 38900 },
+  { date: "07.10", amount: 52420 },
+  { date: "08.10", amount: 52420 },
+  { date: "09.10", amount: 73500 }
+];
+
+const usersData = [
+  { date: "05.10", users: 54 },
+  { date: "06.10", users: 62 },
+  { date: "07.10", users: 73 },
+  { date: "08.10", users: 73 },
+  { date: "09.10", users: 93 }
+];
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
+    <div className="min-h-screen bg-slate-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">Lootbox</h1>
+            <p className="text-slate-600">Кабинет инвестора</p>
+          </div>
+          <Button size="lg" className="gap-2">
+            <Icon name="Download" size={20} />
+            Вывести средства
+          </Button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Выручка всего</CardDescription>
+              <CardTitle className="text-3xl">169 450 ₽</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-green-600">
+                <Icon name="TrendingUp" size={16} className="mr-1" />
+                <span>+15.3% к прошлому периоду</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Выручка за сегодня</CardDescription>
+              <CardTitle className="text-3xl">73 500 ₽</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-green-600">
+                <Icon name="TrendingUp" size={16} className="mr-1" />
+                <span>+40.2% к вчера</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Выручка за вчера</CardDescription>
+              <CardTitle className="text-3xl">52 420 ₽</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-slate-600">
+                <Icon name="Minus" size={16} className="mr-1" />
+                <span>Стабильно</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Пользователей всего</CardDescription>
+              <CardTitle className="text-3xl">213</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-green-600">
+                <Icon name="TrendingUp" size={16} className="mr-1" />
+                <span>+27.5% рост</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Пользователей за сегодня</CardDescription>
+              <CardTitle className="text-3xl">93</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-green-600">
+                <Icon name="TrendingUp" size={16} className="mr-1" />
+                <span>+27.4% к вчера</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Пользователей за вчера</CardDescription>
+              <CardTitle className="text-3xl">73</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center text-sm text-slate-600">
+                <Icon name="Users" size={16} className="mr-1" />
+                <span>Активный прирост</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>График выручки</CardTitle>
+              <CardDescription>Динамика дохода за последние 5 дней</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={revenueData}>
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#64748b"
+                    fontSize={12}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    fontSize={12}
+                    tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1e293b',
+                      border: 'none',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                    formatter={(value: number) => [`${value.toLocaleString()} ₽`, 'Выручка']}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="amount" 
+                    stroke="#3b82f6" 
+                    strokeWidth={3}
+                    dot={{ fill: '#3b82f6', r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>График пользователей</CardTitle>
+              <CardDescription>Динамика новых пользователей за последние 5 дней</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={usersData}>
+                  <XAxis 
+                    dataKey="date" 
+                    stroke="#64748b"
+                    fontSize={12}
+                  />
+                  <YAxis 
+                    stroke="#64748b"
+                    fontSize={12}
+                  />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1e293b',
+                      border: 'none',
+                      borderRadius: '8px',
+                      color: '#fff'
+                    }}
+                    formatter={(value: number) => [`${value}`, 'Пользователей']}
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="users" 
+                    stroke="#10b981" 
+                    strokeWidth={3}
+                    dot={{ fill: '#10b981', r: 5 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Icon name="Wallet" size={24} />
+              Вывод средств
+            </CardTitle>
+            <CardDescription>Управление выводом прибыли</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between p-4 bg-slate-100 rounded-lg">
+              <div>
+                <p className="text-sm text-slate-600">Доступно к выводу</p>
+                <p className="text-2xl font-bold text-slate-900">169 450 ₽</p>
+              </div>
+              <Button size="lg" className="gap-2">
+                <Icon name="ArrowUpRight" size={20} />
+                Вывести
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 border border-slate-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon name="CreditCard" size={20} className="text-slate-600" />
+                  <p className="text-sm font-medium">На карту</p>
+                </div>
+                <p className="text-xs text-slate-500">Перевод 1-3 рабочих дня</p>
+              </div>
+              <div className="p-4 border border-slate-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon name="Building" size={20} className="text-slate-600" />
+                  <p className="text-sm font-medium">На счёт</p>
+                </div>
+                <p className="text-xs text-slate-500">Перевод 1-2 рабочих дня</p>
+              </div>
+              <div className="p-4 border border-slate-200 rounded-lg">
+                <div className="flex items-center gap-2 mb-2">
+                  <Icon name="Smartphone" size={20} className="text-slate-600" />
+                  <p className="text-sm font-medium">СБП</p>
+                </div>
+                <p className="text-xs text-slate-500">Моментальный перевод</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

@@ -2,6 +2,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 const revenueData = [
   { date: "05.10", amount: 45200 },
@@ -24,6 +28,9 @@ const totalRevenue = 169450;
 const availableForWithdrawal = Math.floor(totalRevenue * investorShare);
 
 const Index = () => {
+  const [withdrawalMethod, setWithdrawalMethod] = useState<'card' | 'crypto' | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200">
@@ -58,13 +65,107 @@ const Index = () => {
               <h2 className="text-2xl font-bold text-slate-900">Обзор инвестиций</h2>
               <p className="text-slate-600">Ваша доля: 20% от выручки проекта</p>
             </div>
-            <Button size="lg" className="gap-2">
-              <Icon name="Download" size={20} />
-              Вывести средства
-            </Button>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" className="gap-2">
+                  <Icon name="Download" size={20} />
+                  Вывести средства
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Вывод средств</DialogTitle>
+                  <DialogDescription>
+                    Доступно к выводу: {availableForWithdrawal.toLocaleString()} ₽
+                  </DialogDescription>
+                </DialogHeader>
+                
+                {!withdrawalMethod ? (
+                  <div className="space-y-4">
+                    <p className="text-sm text-slate-600">Выберите способ вывода:</p>
+                    <div className="grid grid-cols-2 gap-4">
+                      <button
+                        onClick={() => setWithdrawalMethod('card')}
+                        className="p-6 border-2 border-slate-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                      >
+                        <Icon name="CreditCard" size={32} className="mx-auto mb-3 text-slate-700" />
+                        <p className="font-medium text-slate-900">На карту</p>
+                        <p className="text-xs text-slate-500 mt-1">1-3 рабочих дня</p>
+                      </button>
+                      <button
+                        onClick={() => setWithdrawalMethod('crypto')}
+                        className="p-6 border-2 border-slate-200 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+                      >
+                        <Icon name="Bitcoin" size={32} className="mx-auto mb-3 text-slate-700" />
+                        <p className="font-medium text-slate-900">Криптовалюта</p>
+                        <p className="text-xs text-slate-500 mt-1">Моментально</p>
+                      </button>
+                    </div>
+                  </div>
+                ) : withdrawalMethod === 'card' ? (
+                  <div className="space-y-4">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setWithdrawalMethod(null)}
+                      className="mb-2"
+                    >
+                      <Icon name="ArrowLeft" size={16} className="mr-2" />
+                      Назад
+                    </Button>
+                    <div className="space-y-2">
+                      <Label htmlFor="cardNumber">Номер карты</Label>
+                      <Input id="cardNumber" placeholder="0000 0000 0000 0000" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="amount">Сумма вывода</Label>
+                      <Input 
+                        id="amount" 
+                        type="number" 
+                        placeholder={availableForWithdrawal.toString()} 
+                        max={availableForWithdrawal}
+                      />
+                    </div>
+                    <Button className="w-full" size="lg">
+                      Оформить вывод
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setWithdrawalMethod(null)}
+                      className="mb-2"
+                    >
+                      <Icon name="ArrowLeft" size={16} className="mr-2" />
+                      Назад
+                    </Button>
+                    <div className="space-y-2">
+                      <Label htmlFor="cryptoAddress">Адрес кошелька (USDT TRC-20)</Label>
+                      <Input id="cryptoAddress" placeholder="Введите адрес..." />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="cryptoAmount">Сумма вывода (₽)</Label>
+                      <Input 
+                        id="cryptoAmount" 
+                        type="number" 
+                        placeholder={availableForWithdrawal.toString()} 
+                        max={availableForWithdrawal}
+                      />
+                    </div>
+                    <Button className="w-full" size="lg">
+                      Оформить вывод
+                    </Button>
+                  </div>
+                )}
+              </DialogContent>
+            </Dialog>
           </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Выручка проекта</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Выручка всего</CardDescription>
@@ -106,7 +207,12 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
+            </div>
+          </div>
 
+          <div>
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">Пользователи</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Пользователей всего</CardDescription>
@@ -145,9 +251,10 @@ const Index = () => {
               </div>
             </CardContent>
           </Card>
-        </div>
+            </div>
+          </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
               <CardTitle>График выручки</CardTitle>

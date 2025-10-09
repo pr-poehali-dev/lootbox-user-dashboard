@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v2';
+const STORAGE_KEY = 'lootbox_growth_data_v3';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -18,22 +18,13 @@ function generateInitialData(): DailyData[] {
     { date: '06.10', revenue: 38900, users: 62 },
     { date: '07.10', revenue: 52420, users: 73 },
     { date: '08.10', revenue: 52420, users: 73 },
+    { date: '09.10', revenue: 83000, users: 95 },
   ];
   
   const data: DailyData[] = fixedData.map(d => ({
     ...d,
     timestamp: Date.now()
   }));
-  
-  const lastDay = fixedData[fixedData.length - 1];
-  const growth = getRandomGrowth(1.22, 1.30);
-  
-  data.push({
-    date: '09.10',
-    revenue: Math.round(lastDay.revenue * growth),
-    users: Math.round(lastDay.users * growth),
-    timestamp: Date.now()
-  });
   
   return data;
 }
@@ -52,12 +43,11 @@ function updateLastDayData(data: DailyData[]): DailyData[] {
   }
   
   const growth = getRandomGrowth(1.22, 1.30);
+  const hourlyRevenueGrowth = Math.round(lastDay.revenue * (growth - 1) / 24);
+  const hourlyUsersGrowth = Math.round(lastDay.users * (growth - 1) / 24);
   
   return data.map((day, index) => {
-    if (index === data.length - 1 || index === data.length - 2) {
-      const hourlyRevenueGrowth = Math.round(day.revenue * (growth - 1) / 24);
-      const hourlyUsersGrowth = Math.round(day.users * (growth - 1) / 24);
-      
+    if (index === data.length - 1) {
       return {
         ...day,
         revenue: day.revenue + hourlyRevenueGrowth,

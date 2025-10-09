@@ -105,6 +105,11 @@ export function calculateMetrics(data: DailyData[]) {
     avgRevenue,
     yourShare,
     totalYourShare,
-    userGrowthPercent
+    userGrowthPercent,
+    totalRevenue
   };
+}
+
+export function getOnlineUsers(): number {
+  return Math.floor(Math.random() * (1000 - 30 + 1)) + 30;
 }

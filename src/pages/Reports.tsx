@@ -4,7 +4,7 @@ import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useState, useEffect } from "react";
-import { getGrowthData, calculateMetrics, type DailyData } from "@/utils/growthSimulator";
+import { getGrowthData, calculateMetrics, getOnlineUsers, type DailyData } from "@/utils/growthSimulator";
 
 const reports = [
   { id: 1, name: "Финансовый отчёт 05.10-09.10", date: "09.10.2025", type: "PDF", size: "1.2 MB" },
@@ -18,14 +18,17 @@ const Reports = () => {
     avgRevenue: 0,
     yourShare: 0,
     totalYourShare: 0,
-    userGrowthPercent: 0
+    userGrowthPercent: 0,
+    totalRevenue: 0
   });
+  const [onlineUsers, setOnlineUsers] = useState(getOnlineUsers());
 
   useEffect(() => {
     const updateData = () => {
       const data = getGrowthData();
       setDailyData(data);
       setMetrics(calculateMetrics(data));
+      setOnlineUsers(getOnlineUsers());
     };
 
     updateData();
@@ -75,7 +78,20 @@ const Reports = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-slate-600">Онлайн</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
+                  {onlineUsers}
+                </p>
+                <p className="text-xs text-slate-500 mt-1">на проекте</p>
+              </CardContent>
+            </Card>
+            
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium text-slate-600">Средняя выручка/день</CardTitle>

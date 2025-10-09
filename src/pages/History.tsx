@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { getGrowthData } from "@/utils/growthSimulator";
+import { getGrowthData, getOnlineUsers } from "@/utils/growthSimulator";
 
 const History = () => {
   const [transactions, setTransactions] = useState<Array<{
@@ -15,6 +15,7 @@ const History = () => {
     status: string;
   }>>([]);
   const [totalAccrued, setTotalAccrued] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState(getOnlineUsers());
 
   useEffect(() => {
     const updateTransactions = () => {
@@ -30,6 +31,7 @@ const History = () => {
       
       setTransactions(newTransactions);
       setTotalAccrued(newTransactions.reduce((sum, t) => sum + t.amount, 0));
+      setOnlineUsers(getOnlineUsers());
     };
 
     updateTransactions();
@@ -79,7 +81,19 @@ const History = () => {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-slate-600">Онлайн</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>
+                  {onlineUsers}
+                </p>
+              </CardContent>
+            </Card>
+            
             <Card>
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm font-medium text-slate-600">Всего начислено</CardTitle>

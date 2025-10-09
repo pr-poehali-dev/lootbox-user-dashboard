@@ -7,13 +7,15 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getGrowthData, calculateMetrics } from "@/utils/growthSimulator";
+import { getGrowthData, calculateMetrics, getOnlineUsers } from "@/utils/growthSimulator";
 
 const Index = () => {
   const [withdrawalMethod, setWithdrawalMethod] = useState<'card' | 'crypto' | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dailyData, setDailyData] = useState<Array<{date: string; amount: number; users: number}>>([]);
   const [availableForWithdrawal, setAvailableForWithdrawal] = useState(0);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  const [onlineUsers, setOnlineUsers] = useState(getOnlineUsers());
 
   useEffect(() => {
     const updateData = () => {
@@ -27,6 +29,8 @@ const Index = () => {
       })));
       
       setAvailableForWithdrawal(metrics.totalYourShare);
+      setTotalRevenue(metrics.totalRevenue);
+      setOnlineUsers(getOnlineUsers());
     };
 
     updateData();
@@ -171,11 +175,24 @@ const Index = () => {
 
           <div>
             <h3 className="text-lg font-semibold text-slate-900 mb-4">Выручка проекта</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardDescription>Онлайн на проекте</CardDescription>
+              <CardTitle className="text-3xl flex items-center gap-2">
+                <span className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
+                {onlineUsers}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-sm text-slate-500">пользователей сейчас</div>
+            </CardContent>
+          </Card>
+          
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Выручка всего</CardDescription>
-              <CardTitle className="text-3xl">{dailyData.reduce((sum, d) => sum + d.amount, 0).toLocaleString()} ₽</CardTitle>
+              <CardTitle className="text-3xl">{totalRevenue.toLocaleString()} ₽</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">

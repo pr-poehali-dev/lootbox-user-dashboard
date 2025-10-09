@@ -34,7 +34,7 @@ const Index = () => {
                 <Icon name="Box" size={24} className="text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-slate-900">Lootbox</h1>
+                <h1 className="text-xl font-bold text-slate-900">LOOTBOX</h1>
                 <p className="text-xs text-slate-500">Инвесторский портал</p>
               </div>
             </div>
@@ -276,13 +276,13 @@ const Index = () => {
 
       <footer className="bg-white border-t border-slate-200 mt-12">
         <div className="max-w-7xl mx-auto px-6 py-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-2 mb-3">
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <Icon name="Box" size={16} className="text-white" />
                 </div>
-                <span className="font-bold text-slate-900">Lootbox</span>
+                <span className="font-bold text-slate-900">LOOTBOX</span>
               </div>
               <p className="text-sm text-slate-600">Инвесторская платформа для управления вашими активами</p>
             </div>
@@ -302,22 +302,10 @@ const Index = () => {
                 <li><a href="#" className="hover:text-slate-900">Документация</a></li>
               </ul>
             </div>
-            <div>
-              <h3 className="font-semibold text-slate-900 mb-3">Контакты</h3>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-center gap-2">
-                  <Icon name="Mail" size={14} />
-                  <span>support@lootbox.ru</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Icon name="Phone" size={14} />
-                  <span>+7 (800) 555-35-35</span>
-                </li>
-              </ul>
-            </div>
+
           </div>
           <div className="border-t border-slate-200 mt-8 pt-6 flex items-center justify-between text-sm text-slate-600">
-            <p>© 2024 Lootbox. Все права защищены.</p>
+            <p>© 2025 LOOTBOX. Все права защищены.</p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-slate-900">Политика конфиденциальности</a>
               <a href="#" className="hover:text-slate-900">Условия использования</a>

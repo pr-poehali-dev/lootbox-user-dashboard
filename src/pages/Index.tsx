@@ -50,10 +50,12 @@ const Index = () => {
               <a href="#" className="text-sm font-medium text-slate-900">Дашборд</a>
               <Link to="/history" className="text-sm text-slate-600 hover:text-slate-900">История</Link>
               <Link to="/reports" className="text-sm text-slate-600 hover:text-slate-900">Отчёты</Link>
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Icon name="User" size={16} />
-                Профиль
-              </Button>
+              <Link to="/profile">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Icon name="User" size={16} />
+                  Профиль
+                </Button>
+              </Link>
             </nav>
           </div>
         </div>

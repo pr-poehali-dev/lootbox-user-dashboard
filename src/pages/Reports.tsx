@@ -43,10 +43,12 @@ const Reports = () => {
               <Link to="/" className="text-sm text-slate-600 hover:text-slate-900">Дашборд</Link>
               <Link to="/history" className="text-sm text-slate-600 hover:text-slate-900">История</Link>
               <a href="#" className="text-sm font-medium text-slate-900">Отчёты</a>
-              <Button variant="ghost" size="sm" className="gap-2">
-                <Icon name="User" size={16} />
-                Профиль
-              </Button>
+              <Link to="/profile">
+                <Button variant="ghost" size="sm" className="gap-2">
+                  <Icon name="User" size={16} />
+                  Профиль
+                </Button>
+              </Link>
             </nav>
           </div>
         </div>

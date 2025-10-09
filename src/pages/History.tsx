@@ -4,15 +4,14 @@ import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 
 const transactions = [
-  { id: 1, date: "09.10.2025", type: "Вывод", method: "На карту", amount: -15000, status: "Выполнено" },
+  { id: 1, date: "09.10.2025", type: "Начисление", method: "Доля 20%", amount: 14700, status: "Выполнено" },
   { id: 2, date: "08.10.2025", type: "Начисление", method: "Доля 20%", amount: 10484, status: "Выполнено" },
   { id: 3, date: "07.10.2025", type: "Начисление", method: "Доля 20%", amount: 10484, status: "Выполнено" },
-  { id: 4, date: "06.10.2025", type: "Вывод", method: "Криптовалюта", amount: -20000, status: "Выполнено" },
+  { id: 4, date: "06.10.2025", type: "Начисление", method: "Доля 20%", amount: 7780, status: "Выполнено" },
   { id: 5, date: "05.10.2025", type: "Начисление", method: "Доля 20%", amount: 9040, status: "Выполнено" },
-  { id: 6, date: "04.10.2025", type: "Начисление", method: "Доля 20%", amount: 7780, status: "Выполнено" },
-  { id: 7, date: "03.10.2025", type: "Вывод", method: "На карту", amount: -12000, status: "В обработке" },
-  { id: 8, date: "02.10.2025", type: "Начисление", method: "Доля 20%", amount: 8564, status: "Выполнено" },
 ];
+
+const totalAccrued = transactions.reduce((sum, t) => sum + t.amount, 0);
 
 const History = () => {
   return (
@@ -63,25 +62,25 @@ const History = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Всего начислено</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">+46 352 ₽</p>
+                <p className="text-2xl font-bold text-slate-900">+{totalAccrued.toLocaleString()} ₽</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-slate-600">Всего выведено</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600">Средняя выручка/день</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">-47 000 ₽</p>
+                <p className="text-2xl font-bold text-slate-900">{Math.floor(totalAccrued / transactions.length).toLocaleString()} ₽</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-slate-600">Транзакций за месяц</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600">Транзакций всего</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">8</p>
+                <p className="text-2xl font-bold text-slate-900">{transactions.length}</p>
               </CardContent>
             </Card>
           </div>
@@ -99,14 +98,12 @@ const History = () => {
                   >
                     <div className="flex items-center gap-4">
                       <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        transaction.type === "Вывод" 
-                          ? "bg-red-100" 
-                          : "bg-green-100"
+                        "bg-green-100"
                       }`}>
                         <Icon 
-                          name={transaction.type === "Вывод" ? "ArrowUpRight" : "ArrowDownLeft"} 
+                          name="ArrowDownLeft" 
                           size={20} 
-                          className={transaction.type === "Вывод" ? "text-red-600" : "text-green-600"}
+                          className="text-green-600"
                         />
                       </div>
                       <div>
@@ -125,12 +122,8 @@ const History = () => {
                           {transaction.status}
                         </p>
                       </div>
-                      <p className={`text-lg font-bold ${
-                        transaction.amount > 0 
-                          ? "text-green-600" 
-                          : "text-red-600"
-                      }`}>
-                        {transaction.amount > 0 ? "+" : ""}{transaction.amount.toLocaleString()} ₽
+                      <p className="text-lg font-bold text-green-600">
+                        +{transaction.amount.toLocaleString()} ₽
                       </p>
                     </div>
                   </div>

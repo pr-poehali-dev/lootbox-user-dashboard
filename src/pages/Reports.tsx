@@ -4,24 +4,18 @@ import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
-const monthlyData = [
-  { month: "Янв", revenue: 45200, users: 54 },
-  { month: "Фев", revenue: 52000, users: 68 },
-  { month: "Мар", revenue: 48500, users: 62 },
-  { month: "Апр", revenue: 61200, users: 79 },
-  { month: "Май", revenue: 58900, users: 73 },
-  { month: "Июн", revenue: 72400, users: 91 },
-  { month: "Июл", revenue: 68300, users: 86 },
-  { month: "Авг", revenue: 81500, users: 102 },
-  { month: "Сен", revenue: 89200, users: 118 },
-  { month: "Окт", revenue: 169450, users: 213 },
+const dailyData = [
+  { date: "05.10", revenue: 45200, users: 54 },
+  { date: "06.10", revenue: 38900, users: 62 },
+  { date: "07.10", revenue: 52420, users: 73 },
+  { date: "08.10", revenue: 52420, users: 73 },
+  { date: "09.10", revenue: 73500, users: 93 },
 ];
 
 const reports = [
-  { id: 1, name: "Финансовый отчёт за октябрь 2025", date: "09.10.2025", type: "PDF", size: "2.3 MB" },
-  { id: 2, name: "Отчёт по пользователям Q3 2025", date: "01.10.2025", type: "Excel", size: "1.8 MB" },
-  { id: 3, name: "Статистика выручки сентябрь 2025", date: "30.09.2025", type: "PDF", size: "1.9 MB" },
-  { id: 4, name: "Аналитика роста Q2 2025", date: "01.07.2025", type: "PDF", size: "3.1 MB" },
+  { id: 1, name: "Финансовый отчёт 05.10-09.10", date: "09.10.2025", type: "PDF", size: "1.2 MB" },
+  { id: 2, name: "Отчёт по пользователям за период", date: "09.10.2025", type: "Excel", size: "0.9 MB" },
+  { id: 3, name: "Статистика выручки 05.10-09.10", date: "09.10.2025", type: "PDF", size: "1.1 MB" },
 ];
 
 const Reports = () => {
@@ -70,21 +64,21 @@ const Reports = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-slate-600">Средняя выручка/месяц</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600">Средняя выручка/день</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">72 265 ₽</p>
-                <p className="text-xs text-green-600 mt-1">+18.5% к прошлому кварталу</p>
+                <p className="text-2xl font-bold text-slate-900">52 488 ₽</p>
+                <p className="text-xs text-slate-500 mt-1">05.10-09.10.2025</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-slate-600">Средний чек</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600">Ваша доля</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">796 ₽</p>
-                <p className="text-xs text-slate-500 mt-1">За последние 30 дней</p>
+                <p className="text-2xl font-bold text-slate-900">10 498 ₽</p>
+                <p className="text-xs text-slate-500 mt-1">Среднее в день (20%)</p>
               </CardContent>
             </Card>
 
@@ -93,18 +87,18 @@ const Reports = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Прирост пользователей</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">+134%</p>
-                <p className="text-xs text-green-600 mt-1">С начала года</p>
+                <p className="text-2xl font-bold text-slate-900">+72%</p>
+                <p className="text-xs text-green-600 mt-1">05.10-09.10.2025</p>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-slate-600">ROI</CardTitle>
+                <CardTitle className="text-sm font-medium text-slate-600">Всего начислено</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">42.8%</p>
-                <p className="text-xs text-green-600 mt-1">За текущий квартал</p>
+                <p className="text-2xl font-bold text-slate-900">52 488 ₽</p>
+                <p className="text-xs text-green-600 mt-1">За период</p>
               </CardContent>
             </Card>
           </div>
@@ -112,14 +106,14 @@ const Reports = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Динамика выручки по месяцам</CardTitle>
-                <CardDescription>Статистика за 2025 год</CardDescription>
+                <CardTitle>Динамика выручки по дням</CardTitle>
+                <CardDescription>Статистика 05.10-09.10.2025</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={monthlyData}>
+                  <BarChart data={dailyData}>
                     <XAxis 
-                      dataKey="month" 
+                      dataKey="date" 
                       stroke="#64748b"
                       fontSize={12}
                     />
@@ -149,14 +143,14 @@ const Reports = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Прирост пользователей по месяцам</CardTitle>
-                <CardDescription>Статистика за 2025 год</CardDescription>
+                <CardTitle>Прирост пользователей по дням</CardTitle>
+                <CardDescription>Статистика 05.10-09.10.2025</CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={monthlyData}>
+                  <BarChart data={dailyData}>
                     <XAxis 
-                      dataKey="month" 
+                      dataKey="date" 
                       stroke="#64748b"
                       fontSize={12}
                     />

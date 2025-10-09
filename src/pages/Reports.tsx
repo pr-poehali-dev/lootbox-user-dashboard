@@ -3,14 +3,8 @@ import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-
-const dailyData = [
-  { date: "05.10", revenue: 45200, users: 54 },
-  { date: "06.10", revenue: 38900, users: 62 },
-  { date: "07.10", revenue: 52420, users: 73 },
-  { date: "08.10", revenue: 52420, users: 73 },
-  { date: "09.10", revenue: 73500, users: 93 },
-];
+import { useState, useEffect } from "react";
+import { getGrowthData, calculateMetrics, type DailyData } from "@/utils/growthSimulator";
 
 const reports = [
   { id: 1, name: "Финансовый отчёт 05.10-09.10", date: "09.10.2025", type: "PDF", size: "1.2 MB" },
@@ -19,6 +13,26 @@ const reports = [
 ];
 
 const Reports = () => {
+  const [dailyData, setDailyData] = useState<DailyData[]>([]);
+  const [metrics, setMetrics] = useState({
+    avgRevenue: 0,
+    yourShare: 0,
+    totalYourShare: 0,
+    userGrowthPercent: 0
+  });
+
+  useEffect(() => {
+    const updateData = () => {
+      const data = getGrowthData();
+      setDailyData(data);
+      setMetrics(calculateMetrics(data));
+    };
+
+    updateData();
+    const interval = setInterval(updateData, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200">
@@ -67,7 +81,7 @@ const Reports = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Средняя выручка/день</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">52 488 ₽</p>
+                <p className="text-2xl font-bold text-slate-900">{metrics.avgRevenue.toLocaleString()} ₽</p>
                 <p className="text-xs text-slate-500 mt-1">05.10-09.10.2025</p>
               </CardContent>
             </Card>
@@ -77,7 +91,7 @@ const Reports = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Ваша доля</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">10 498 ₽</p>
+                <p className="text-2xl font-bold text-slate-900">{metrics.yourShare.toLocaleString()} ₽</p>
                 <p className="text-xs text-slate-500 mt-1">Среднее в день (20%)</p>
               </CardContent>
             </Card>
@@ -87,7 +101,7 @@ const Reports = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Прирост пользователей</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">+72%</p>
+                <p className="text-2xl font-bold text-slate-900">+{metrics.userGrowthPercent}%</p>
                 <p className="text-xs text-green-600 mt-1">05.10-09.10.2025</p>
               </CardContent>
             </Card>
@@ -97,7 +111,7 @@ const Reports = () => {
                 <CardTitle className="text-sm font-medium text-slate-600">Всего начислено</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-bold text-slate-900">52 488 ₽</p>
+                <p className="text-2xl font-bold text-slate-900">{metrics.totalYourShare.toLocaleString()} ₽</p>
                 <p className="text-xs text-green-600 mt-1">За период</p>
               </CardContent>
             </Card>

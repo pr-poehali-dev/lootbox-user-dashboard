@@ -5,32 +5,35 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "rec
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-const revenueData = [
-  { date: "05.10", amount: 45200 },
-  { date: "06.10", amount: 38900 },
-  { date: "07.10", amount: 52420 },
-  { date: "08.10", amount: 52420 },
-  { date: "09.10", amount: 73500 }
-];
-
-const usersData = [
-  { date: "05.10", users: 54 },
-  { date: "06.10", users: 62 },
-  { date: "07.10", users: 73 },
-  { date: "08.10", users: 73 },
-  { date: "09.10", users: 93 }
-];
-
-const investorShare = 0.2;
-const totalRevenue = 169450;
-const availableForWithdrawal = Math.floor(totalRevenue * investorShare);
+import { getGrowthData, calculateMetrics } from "@/utils/growthSimulator";
 
 const Index = () => {
   const [withdrawalMethod, setWithdrawalMethod] = useState<'card' | 'crypto' | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dailyData, setDailyData] = useState<Array<{date: string; amount: number; users: number}>>([]);
+  const [availableForWithdrawal, setAvailableForWithdrawal] = useState(0);
+
+  useEffect(() => {
+    const updateData = () => {
+      const data = getGrowthData();
+      const metrics = calculateMetrics(data);
+      
+      setDailyData(data.map(d => ({
+        date: d.date,
+        amount: d.revenue,
+        users: d.users
+      })));
+      
+      setAvailableForWithdrawal(metrics.totalYourShare);
+    };
+
+    updateData();
+    const interval = setInterval(updateData, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -172,13 +175,13 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Выручка всего</CardDescription>
-              <CardTitle className="text-3xl">169 450 ₽</CardTitle>
+              <CardTitle className="text-3xl">{dailyData.reduce((sum, d) => sum + d.amount, 0).toLocaleString()} ₽</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div className="flex items-center text-sm text-green-600">
                   <Icon name="TrendingUp" size={16} className="mr-1" />
-                  <span>+15.3%</span>
+                  <span>+{dailyData.length > 1 ? Math.round(((dailyData[dailyData.length-1].amount - dailyData[0].amount) / dailyData[0].amount) * 100) : 0}%</span>
                 </div>
                 <div className="text-sm text-slate-500">Ваша доля: {availableForWithdrawal.toLocaleString()} ₽</div>
               </div>
@@ -188,12 +191,12 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Выручка за сегодня</CardDescription>
-              <CardTitle className="text-3xl">73 500 ₽</CardTitle>
+              <CardTitle className="text-3xl">{dailyData[dailyData.length-1]?.amount.toLocaleString() || 0} ₽</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-sm text-green-600">
                 <Icon name="TrendingUp" size={16} className="mr-1" />
-                <span>+40.2% к вчера</span>
+                <span>+{dailyData.length > 1 ? Math.round(((dailyData[dailyData.length-1].amount - dailyData[dailyData.length-2].amount) / dailyData[dailyData.length-2].amount) * 100) : 0}% к вчера</span>
               </div>
             </CardContent>
           </Card>
@@ -201,7 +204,7 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Выручка за вчера</CardDescription>
-              <CardTitle className="text-3xl">52 420 ₽</CardTitle>
+              <CardTitle className="text-3xl">{dailyData[dailyData.length-2]?.amount.toLocaleString() || 0} ₽</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-sm text-slate-600">
@@ -219,12 +222,12 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Пользователей всего</CardDescription>
-              <CardTitle className="text-3xl">213</CardTitle>
+              <CardTitle className="text-3xl">{dailyData.reduce((sum, d) => sum + d.users, 0)}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-sm text-green-600">
                 <Icon name="TrendingUp" size={16} className="mr-1" />
-                <span>+27.5% рост</span>
+                <span>+{dailyData.length > 1 ? Math.round(((dailyData[dailyData.length-1].users - dailyData[0].users) / dailyData[0].users) * 100) : 0}% рост</span>
               </div>
             </CardContent>
           </Card>
@@ -232,12 +235,12 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Пользователей за сегодня</CardDescription>
-              <CardTitle className="text-3xl">93</CardTitle>
+              <CardTitle className="text-3xl">{dailyData[dailyData.length-1]?.users || 0}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-sm text-green-600">
                 <Icon name="TrendingUp" size={16} className="mr-1" />
-                <span>+27.4% к вчера</span>
+                <span>+{dailyData.length > 1 ? Math.round(((dailyData[dailyData.length-1].users - dailyData[dailyData.length-2].users) / dailyData[dailyData.length-2].users) * 100) : 0}% к вчера</span>
               </div>
             </CardContent>
           </Card>
@@ -245,7 +248,7 @@ const Index = () => {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Пользователей за вчера</CardDescription>
-              <CardTitle className="text-3xl">73</CardTitle>
+              <CardTitle className="text-3xl">{dailyData[dailyData.length-2]?.users || 0}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex items-center text-sm text-slate-600">
@@ -265,7 +268,7 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={revenueData}>
+                <LineChart data={dailyData}>
                   <XAxis 
                     dataKey="date" 
                     stroke="#64748b"
@@ -304,7 +307,7 @@ const Index = () => {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={usersData}>
+                <LineChart data={dailyData}>
                   <XAxis 
                     dataKey="date" 
                     stroke="#64748b"

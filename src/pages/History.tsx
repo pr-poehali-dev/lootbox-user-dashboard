@@ -2,18 +2,41 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import { Link } from "react-router-dom";
-
-const transactions = [
-  { id: 1, date: "09.10.2025", type: "Начисление", method: "Доля 20%", amount: 14700, status: "Выполнено" },
-  { id: 2, date: "08.10.2025", type: "Начисление", method: "Доля 20%", amount: 10484, status: "Выполнено" },
-  { id: 3, date: "07.10.2025", type: "Начисление", method: "Доля 20%", amount: 10484, status: "Выполнено" },
-  { id: 4, date: "06.10.2025", type: "Начисление", method: "Доля 20%", amount: 7780, status: "Выполнено" },
-  { id: 5, date: "05.10.2025", type: "Начисление", method: "Доля 20%", amount: 9040, status: "Выполнено" },
-];
-
-const totalAccrued = transactions.reduce((sum, t) => sum + t.amount, 0);
+import { useState, useEffect } from "react";
+import { getGrowthData } from "@/utils/growthSimulator";
 
 const History = () => {
+  const [transactions, setTransactions] = useState<Array<{
+    id: number;
+    date: string;
+    type: string;
+    method: string;
+    amount: number;
+    status: string;
+  }>>([]);
+  const [totalAccrued, setTotalAccrued] = useState(0);
+
+  useEffect(() => {
+    const updateTransactions = () => {
+      const data = getGrowthData();
+      const newTransactions = data.map((day, index) => ({
+        id: data.length - index,
+        date: `${day.date}.2025`,
+        type: "Начисление",
+        method: "Доля 20%",
+        amount: Math.round(day.revenue * 0.20),
+        status: "Выполнено"
+      })).reverse();
+      
+      setTransactions(newTransactions);
+      setTotalAccrued(newTransactions.reduce((sum, t) => sum + t.amount, 0));
+    };
+
+    updateTransactions();
+    const interval = setInterval(updateTransactions, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
   return (
     <div className="min-h-screen bg-slate-50">
       <header className="bg-white border-b border-slate-200">

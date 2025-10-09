@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data';
+const STORAGE_KEY = 'lootbox_growth_data_v2';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {

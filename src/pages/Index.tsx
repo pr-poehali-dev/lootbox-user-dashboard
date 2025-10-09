@@ -19,20 +19,50 @@ const usersData = [
   { date: "09.10", users: 93 }
 ];
 
+const investorShare = 0.2;
+const totalRevenue = 169450;
+const availableForWithdrawal = Math.floor(totalRevenue * investorShare);
+
 const Index = () => {
   return (
-    <div className="min-h-screen bg-slate-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">Lootbox</h1>
-            <p className="text-slate-600">Кабинет инвестора</p>
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <Icon name="Box" size={24} className="text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-slate-900">Lootbox</h1>
+                <p className="text-xs text-slate-500">Инвесторский портал</p>
+              </div>
+            </div>
+            <nav className="hidden md:flex items-center gap-6">
+              <a href="#" className="text-sm font-medium text-slate-900">Дашборд</a>
+              <a href="#" className="text-sm text-slate-600 hover:text-slate-900">История</a>
+              <a href="#" className="text-sm text-slate-600 hover:text-slate-900">Отчёты</a>
+              <Button variant="ghost" size="sm" className="gap-2">
+                <Icon name="User" size={16} />
+                Профиль
+              </Button>
+            </nav>
           </div>
-          <Button size="lg" className="gap-2">
-            <Icon name="Download" size={20} />
-            Вывести средства
-          </Button>
         </div>
+      </header>
+
+      <main className="p-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900">Обзор инвестиций</h2>
+              <p className="text-slate-600">Ваша доля: 20% от выручки проекта</p>
+            </div>
+            <Button size="lg" className="gap-2">
+              <Icon name="Download" size={20} />
+              Вывести средства
+            </Button>
+          </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card>
@@ -41,9 +71,12 @@ const Index = () => {
               <CardTitle className="text-3xl">169 450 ₽</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center text-sm text-green-600">
-                <Icon name="TrendingUp" size={16} className="mr-1" />
-                <span>+15.3% к прошлому периоду</span>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center text-sm text-green-600">
+                  <Icon name="TrendingUp" size={16} className="mr-1" />
+                  <span>+15.3%</span>
+                </div>
+                <div className="text-sm text-slate-500">Ваша доля: {availableForWithdrawal.toLocaleString()} ₽</div>
               </div>
             </CardContent>
           </Card>
@@ -204,8 +237,9 @@ const Index = () => {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-slate-100 rounded-lg">
               <div>
-                <p className="text-sm text-slate-600">Доступно к выводу</p>
-                <p className="text-2xl font-bold text-slate-900">169 450 ₽</p>
+                <p className="text-sm text-slate-600">Доступно к выводу (20%)</p>
+                <p className="text-2xl font-bold text-slate-900">{availableForWithdrawal.toLocaleString()} ₽</p>
+                <p className="text-xs text-slate-500 mt-1">из {totalRevenue.toLocaleString()} ₽ общей выручки</p>
               </div>
               <Button size="lg" className="gap-2">
                 <Icon name="ArrowUpRight" size={20} />
@@ -237,7 +271,60 @@ const Index = () => {
             </div>
           </CardContent>
         </Card>
-      </div>
+        </div>
+      </main>
+
+      <footer className="bg-white border-t border-slate-200 mt-12">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                  <Icon name="Box" size={16} className="text-white" />
+                </div>
+                <span className="font-bold text-slate-900">Lootbox</span>
+              </div>
+              <p className="text-sm text-slate-600">Инвесторская платформа для управления вашими активами</p>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-3">Навигация</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li><a href="#" className="hover:text-slate-900">Дашборд</a></li>
+                <li><a href="#" className="hover:text-slate-900">История транзакций</a></li>
+                <li><a href="#" className="hover:text-slate-900">Отчёты</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-3">Поддержка</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li><a href="#" className="hover:text-slate-900">Помощь</a></li>
+                <li><a href="#" className="hover:text-slate-900">Контакты</a></li>
+                <li><a href="#" className="hover:text-slate-900">Документация</a></li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-slate-900 mb-3">Контакты</h3>
+              <ul className="space-y-2 text-sm text-slate-600">
+                <li className="flex items-center gap-2">
+                  <Icon name="Mail" size={14} />
+                  <span>support@lootbox.ru</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Icon name="Phone" size={14} />
+                  <span>+7 (800) 555-35-35</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-slate-200 mt-8 pt-6 flex items-center justify-between text-sm text-slate-600">
+            <p>© 2024 Lootbox. Все права защищены.</p>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-slate-900">Политика конфиденциальности</a>
+              <a href="#" className="hover:text-slate-900">Условия использования</a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -52,11 +52,12 @@ function updateLastDayData(data: DailyData[]): DailyData[] {
   }
   
   const growth = getRandomGrowth(1.22, 1.30);
-  const hourlyRevenueGrowth = Math.round(lastDay.revenue * (growth - 1) / 24);
-  const hourlyUsersGrowth = Math.round(lastDay.users * (growth - 1) / 24);
   
   return data.map((day, index) => {
-    if (index === data.length - 1) {
+    if (index === data.length - 1 || index === data.length - 2) {
+      const hourlyRevenueGrowth = Math.round(day.revenue * (growth - 1) / 24);
+      const hourlyUsersGrowth = Math.round(day.users * (growth - 1) / 24);
+      
       return {
         ...day,
         revenue: day.revenue + hourlyRevenueGrowth,

@@ -111,5 +111,5 @@ export function calculateMetrics(data: DailyData[]) {
 }
 
 export function getOnlineUsers(): number {
-  return Math.floor(Math.random() * (1000 - 30 + 1)) + 30;
+  return Math.floor(Math.random() * (600 - 30 + 1)) + 30;
 }

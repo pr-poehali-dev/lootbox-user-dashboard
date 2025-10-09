@@ -13,26 +13,27 @@ function getRandomGrowth(min: number, max: number): number {
 }
 
 function generateInitialData(): DailyData[] {
-  const baseRevenue = 45200;
-  const baseUsers = 54;
-  const dates = ['05.10', '06.10', '07.10', '08.10', '09.10'];
+  const fixedData = [
+    { date: '05.10', revenue: 45200, users: 54 },
+    { date: '06.10', revenue: 38900, users: 62 },
+    { date: '07.10', revenue: 52420, users: 73 },
+    { date: '08.10', revenue: 52420, users: 73 },
+  ];
   
-  const data: DailyData[] = [];
-  let currentRevenue = baseRevenue;
-  let currentUsers = baseUsers;
+  const data: DailyData[] = fixedData.map(d => ({
+    ...d,
+    timestamp: Date.now()
+  }));
   
-  for (const date of dates) {
-    data.push({
-      date,
-      revenue: Math.round(currentRevenue),
-      users: Math.round(currentUsers),
-      timestamp: Date.now()
-    });
-    
-    const growth = getRandomGrowth(1.22, 1.30);
-    currentRevenue *= growth;
-    currentUsers *= growth;
-  }
+  const lastDay = fixedData[fixedData.length - 1];
+  const growth = getRandomGrowth(1.22, 1.30);
+  
+  data.push({
+    date: '09.10',
+    revenue: Math.round(lastDay.revenue * growth),
+    users: Math.round(lastDay.users * growth),
+    timestamp: Date.now()
+  });
   
   return data;
 }

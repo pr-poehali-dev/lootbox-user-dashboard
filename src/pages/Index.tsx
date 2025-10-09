@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const revenueData = [
   { date: "05.10", amount: 45200 },
@@ -47,8 +48,8 @@ const Index = () => {
             </div>
             <nav className="hidden md:flex items-center gap-6">
               <a href="#" className="text-sm font-medium text-slate-900">Дашборд</a>
-              <a href="#" className="text-sm text-slate-600 hover:text-slate-900">История</a>
-              <a href="#" className="text-sm text-slate-600 hover:text-slate-900">Отчёты</a>
+              <Link to="/history" className="text-sm text-slate-600 hover:text-slate-900">История</Link>
+              <Link to="/reports" className="text-sm text-slate-600 hover:text-slate-900">Отчёты</Link>
               <Button variant="ghost" size="sm" className="gap-2">
                 <Icon name="User" size={16} />
                 Профиль
@@ -397,8 +398,8 @@ const Index = () => {
               <h3 className="font-semibold text-slate-900 mb-3">Навигация</h3>
               <ul className="space-y-2 text-sm text-slate-600">
                 <li><a href="#" className="hover:text-slate-900">Дашборд</a></li>
-                <li><a href="#" className="hover:text-slate-900">История транзакций</a></li>
-                <li><a href="#" className="hover:text-slate-900">Отчёты</a></li>
+                <li><Link to="/history" className="hover:text-slate-900">История транзакций</Link></li>
+                <li><Link to="/reports" className="hover:text-slate-900">Отчёты</Link></li>
               </ul>
             </div>
             <div>

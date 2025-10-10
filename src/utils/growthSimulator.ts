@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v3';
+const STORAGE_KEY = 'lootbox_growth_data_v4';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -19,6 +19,7 @@ function generateInitialData(): DailyData[] {
     { date: '07.10', revenue: 52420, users: 73 },
     { date: '08.10', revenue: 52420, users: 73 },
     { date: '09.10', revenue: 83000, users: 95 },
+    { date: '10.10', revenue: 102000, users: 117 },
   ];
   
   const data: DailyData[] = fixedData.map(d => ({

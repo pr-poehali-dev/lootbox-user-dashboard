@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v6';
+const STORAGE_KEY = 'lootbox_growth_data_v7';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -13,19 +13,47 @@ function getRandomGrowth(min: number, max: number): number {
 }
 
 function generateInitialData(): DailyData[] {
-  const fixedData = [
+  const startDate = new Date('2024-10-05');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const baseData = [
     { date: '05.10', revenue: 45200, users: 54 },
     { date: '06.10', revenue: 38900, users: 62 },
     { date: '07.10', revenue: 52420, users: 73 },
     { date: '08.10', revenue: 52420, users: 73 },
-    { date: '09.10', revenue: 92000, users: 105 },
-    { date: '10.10', revenue: 82000, users: 98 },
   ];
   
-  const data: DailyData[] = fixedData.map(d => ({
+  const data: DailyData[] = baseData.map(d => ({
     ...d,
     timestamp: Date.now()
   }));
+  
+  // Автоматически генерируем дни с 09.10 до сегодня
+  let lastRevenue = 52420;
+  let lastUsers = 73;
+  
+  const currentDate = new Date('2024-10-09');
+  
+  while (currentDate <= today) {
+    const growth = getRandomGrowth(1.22, 1.30);
+    const dateStr = `${String(currentDate.getDate()).padStart(2, '0')}.${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    
+    lastRevenue = Math.round(lastRevenue * growth);
+    lastUsers = Math.round(lastUsers * growth);
+    
+    // Если это сегодня - делаем стартовую выручку меньше (будет расти в течение дня)
+    const isToday = currentDate.toDateString() === today.toDateString();
+    
+    data.push({
+      date: dateStr,
+      revenue: isToday ? Math.round(lastRevenue * 0.75) : lastRevenue,
+      users: isToday ? Math.round(lastUsers * 0.75) : lastUsers,
+      timestamp: Date.now()
+    });
+    
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
   
   return data;
 }

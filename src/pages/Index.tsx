@@ -34,7 +34,7 @@ const Index = () => {
     };
 
     updateData();
-    const interval = setInterval(updateData, 30000);
+    const interval = setInterval(updateData, 60000);
 
     return () => clearInterval(interval);
   }, []);

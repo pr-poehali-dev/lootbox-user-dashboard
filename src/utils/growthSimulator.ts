@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v7';
+const STORAGE_KEY = 'lootbox_growth_data_v8';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -13,7 +13,6 @@ function getRandomGrowth(min: number, max: number): number {
 }
 
 function generateInitialData(): DailyData[] {
-  const startDate = new Date('2024-10-05');
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
@@ -36,7 +35,7 @@ function generateInitialData(): DailyData[] {
   const currentDate = new Date('2024-10-09');
   
   while (currentDate <= today) {
-    const growth = getRandomGrowth(1.22, 1.30);
+    const growth = 1.25; // Фиксированный рост 25% в день
     const dateStr = `${String(currentDate.getDate()).padStart(2, '0')}.${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
     
     lastRevenue = Math.round(lastRevenue * growth);
@@ -47,8 +46,8 @@ function generateInitialData(): DailyData[] {
     
     data.push({
       date: dateStr,
-      revenue: isToday ? Math.round(lastRevenue * 0.75) : lastRevenue,
-      users: isToday ? Math.round(lastUsers * 0.75) : lastUsers,
+      revenue: isToday ? Math.round(lastRevenue * 0.7) : lastRevenue,
+      users: isToday ? Math.round(lastUsers * 0.7) : lastUsers,
       timestamp: Date.now()
     });
     

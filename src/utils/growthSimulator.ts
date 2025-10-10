@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v12';
+const STORAGE_KEY = 'lootbox_growth_data_v13';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -33,16 +33,16 @@ function generateInitialData(): DailyData[] {
   if (baseData[baseData.length - 1].date !== currentDateStr) {
     data.push({
       date: currentDateStr,
-      revenue: 68000,
-      users: 84,
+      revenue: 95000,
+      users: 118,
       timestamp: Date.now()
     });
   } else {
     // Если последний день = сегодня, обновляем его
     data[data.length - 1] = {
       date: currentDateStr,
-      revenue: 68000,
-      users: 84,
+      revenue: 95000,
+      users: 118,
       timestamp: Date.now()
     };
   }
@@ -82,11 +82,11 @@ function updateLastDayData(data: DailyData[]): DailyData[] {
     return data;
   }
   
-  // Рост с 68000 до 180000 за 24 часа (реклама работает!)
+  // Рост с 95000 до 180000 за 24 часа (реклама работает!)
   const targetRevenue = 180000;
   const targetUsers = 210;
-  const hourlyRevenueGrowth = Math.round((targetRevenue - 68000) / 24);
-  const hourlyUsersGrowth = Math.round((targetUsers - 84) / 24);
+  const hourlyRevenueGrowth = Math.round((targetRevenue - 95000) / 24);
+  const hourlyUsersGrowth = Math.round((targetUsers - 118) / 24);
   
   return data.map((day, index) => {
     if (index === data.length - 1) {

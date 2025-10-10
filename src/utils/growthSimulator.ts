@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'lootbox_growth_data_v10';
+const STORAGE_KEY = 'lootbox_growth_data_v11';
 const UPDATE_INTERVAL = 3600000; // 1 час в миллисекундах
 
 export interface DailyData {
@@ -82,9 +82,9 @@ function updateLastDayData(data: DailyData[]): DailyData[] {
     return data;
   }
   
-  // Рост с 35000 до 130000 за 24 часа = +95000
-  const targetRevenue = 130000;
-  const targetUsers = 156;
+  // Рост с 35000 до 180000 за 24 часа (реклама работает!)
+  const targetRevenue = 180000;
+  const targetUsers = 210;
   const hourlyRevenueGrowth = Math.round((targetRevenue - 35000) / 24);
   const hourlyUsersGrowth = Math.round((targetUsers - 42) / 24);
   

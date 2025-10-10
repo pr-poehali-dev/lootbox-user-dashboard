@@ -33,11 +33,30 @@ function shouldUpdate(lastTimestamp: number): boolean {
   return Date.now() - lastTimestamp >= UPDATE_INTERVAL;
 }
 
+function getCurrentDate(): string {
+  const now = new Date();
+  return `${String(now.getDate()).padStart(2, '0')}.${String(now.getMonth() + 1).padStart(2, '0')}`;
+}
+
 function updateLastDayData(data: DailyData[]): DailyData[] {
   if (data.length === 0) return generateInitialData();
   
   const lastDay = data[data.length - 1];
+  const currentDate = getCurrentDate();
   
+  // Если текущая дата не совпадает с последним днём в данных - создаём новый день
+  if (lastDay.date !== currentDate) {
+    const growth = getRandomGrowth(1.22, 1.30);
+    const newDay: DailyData = {
+      date: currentDate,
+      revenue: Math.round(lastDay.revenue * growth),
+      users: Math.round(lastDay.users * growth),
+      timestamp: Date.now()
+    };
+    return [...data, newDay];
+  }
+  
+  // Если это текущий день - обновляем его ежечасно
   if (!shouldUpdate(lastDay.timestamp)) {
     return data;
   }

@@ -82,18 +82,12 @@ function updateLastDayData(data: DailyData[]): DailyData[] {
     return data;
   }
   
-  // Рост с 95000 до 180000 за 24 часа (реклама работает!)
-  const targetRevenue = 180000;
-  const targetUsers = 210;
-  const hourlyRevenueGrowth = Math.round((targetRevenue - 95000) / 24);
-  const hourlyUsersGrowth = Math.round((targetUsers - 118) / 24);
-  
   return data.map((day, index) => {
     if (index === data.length - 1) {
       return {
         ...day,
-        revenue: day.revenue + hourlyRevenueGrowth,
-        users: day.users + hourlyUsersGrowth,
+        revenue: Math.round(day.revenue * 1.01),
+        users: Math.round(day.users * 1.01),
         timestamp: Date.now()
       };
     }
